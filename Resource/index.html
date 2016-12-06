@@ -1,0 +1,73 @@
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+</body>
+<script
+  src="http://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+//https://segmentfault.com/a/1190000000684923
+var promise = new Promise();
+console.log(promise)
+promise.resolve();
+
+//预装载图片的类
+class PerloadImg{
+    //图片列表
+    constructor(list,imgs){
+        this.list = list;
+        this.imgs = imgs;
+    }
+    //初始化
+    init(){
+        console.log("init")
+        var  def = $.Deferred(),
+             len = this.list.length;
+        $(list).each((i,e)=>{
+            var img = new Image();
+            img.src = e;
+            if(img.complete){
+                imgs[i] = ig;
+                len -- ;
+                if(len == 0 ){
+                    def.resolve();
+                }
+            }
+            else{
+                img.onload = (function(j){
+                    return () => {
+                        imgs[j] = img;
+                        len -- ;
+                        if(len == 0){
+                            def.resolve();
+                        }
+                    }
+                })(i);
+                img.onerror =function(){
+                    len -- ;
+                    console.log("fail to load image");
+                }
+            }
+        })
+        return def.promise();
+    }
+}
+
+
+var list = ['1.png','2.png'],imgs = [];
+
+var perloadimg=  new PerloadImg(list,imgs);
+perloadimg.init();
+
+
+
+
+</script>
+
+
+</html>
